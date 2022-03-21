@@ -52,8 +52,6 @@ client.serverTime()
 ### Place Order
 Buy/sell something.
 ```python
-price = 1.012
-
 client.order(market="ADA/USDT", side="BUY", amount=10, price=0.6)
 ```
 
