@@ -1,7 +1,9 @@
 # Python-Hotbit
 A Python package for the cryptocurrency exchange Hotbit that doesn't require an API Key, making it available to everyone.
 
-This package is still at the development stage which is why not all endpoints are covered.
+The package also work with official api keys, if you want help getting one, join my [Discord](https://discord.gg/FAK6yVQFE3)
+
+This is still at the development stage which is why not all endpoints are covered.
 
 # Installation
 ```
@@ -34,7 +36,7 @@ auth = hotbit.auth.login(email=email, password=password, authenticatorCode=authe
 Client = hotbit.Hotbit(auth)
 ```
 ### Official API (Key/Secret)
-If you want help gaining access to the official api, join the [Discord](https://discord.gg/hotbit).
+If you want help gaining access to the official api, join the [Discord](https://discord.gg/FAK6yVQFE3).
 ```python
 import hotbit
 
