@@ -1,14 +1,17 @@
 # Python-Hotbit
-A Python package for the crypto currency exchange Hotbit that doesn't require an API Key, making it available to everyone.
+A Python package for the cryptocurrency exchange Hotbit that doesn't require an API Key, making it available to everyone.
 
 # Discord
 Join click [here](https://discord.gg/FAK6yVQFE3) to join our Discord
 
 # Documentation
-This package is still at the developement stage which is why not all endpoints are covered.
+This package is still at the development stage which is why not all endpoints are covered.
 
 ## Auth
 ### Email, Password, 2FA
+For this method the either [Anti-Captcha](https://anti-captcha.com/) or [2Captcha](https://2captcha.com/) is needed  
+Please notice the price of login is about **$0.0019** on **Anti-Captcha** and about **$0.0029** on **2Captcha**, as they charge for the captcha solving.  
+If you don't want to pay you can use either **Key/Secret** or **Cookie** as the authorization method
 ```python
 import hotbit
 
@@ -66,13 +69,6 @@ Query your balance on Hotbit
 client.balanceQuery()
 ```
 
-### Price
-Retreve the price of a select market
-```python
-market = "ADA/USDT"
-client.price(market)
-```
-
 ### Market Price
 Retreve the instant buy/sell price of a select market.  
 This function has some logic behind it meaning it does not only use Hotbit's endpoints to calculate.
@@ -94,13 +90,13 @@ client.depthQuery(market)
 ### Market List
 Retreve a list over all markets
 ```python
-client.serverTime()
+client.marketList()
 ```
 
 ### Allticker
 Retreve a list over all tickers
 ```python
-client.serverTime()
+client.allticker()
 ```
 
 ### HTTP
