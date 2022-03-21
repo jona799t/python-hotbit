@@ -1,9 +1,9 @@
 # Python-Hotbit
 A Python package for the cryptocurrency exchange Hotbit that doesn't require an API Key, making it available to everyone.
 
-The package also work with official api keys, if you want help getting one, join my <a href="https://discord.gg/FAK6yVQFE3" target="_blank">Discord</a>
+The package also work with official api keys, if you want help getting one, join my [Discord](https://discord.gg/FAK6yVQFE3).
 
-This package is still at the development stage which is why not all endpoints are covered.
+This is still at the development stage which is why not all endpoints are covered.
 
 # Installation
 ```
@@ -15,7 +15,7 @@ pip install python-hotbit
 ```
 
 # Discord
-Join click <a href="https://discord.gg/FAK6yVQFE3" target="_blank">here</a> to join our Discord.
+Join click [here](https://discord.gg/FAK6yVQFE3) to join our Discord.
 
 # Documentation
 ## Auth
@@ -36,7 +36,7 @@ auth = hotbit.auth.login(email=email, password=password, authenticatorCode=authe
 Client = hotbit.Hotbit(auth)
 ```
 ### Official API (Key/Secret)
-If you want help gaining access to the official api, join the <a href="https://discord.gg/FAK6yVQFE3" target="_blank">Discord</a>.
+If you want help gaining access to the official api, join the [Discord](https://discord.gg/FAK6yVQFE3).
 ```python
 import hotbit
 
@@ -109,7 +109,7 @@ client.allticker()
 ```
 
 ### HTTP
-This only works when using the official API. Endpoints can be found here: <a href="https://hotbitex.github.io/slate/docs/spot/v2/en" target="_blank">https://hotbitex.github.io/slate/docs/spot/v2/en</a>.
+This only works when using the official API. Endpoints can be found here: https://hotbitex.github.io/slate/docs/spot/v2/en.
 ```python
 urlPath = "/p2/balance.query"
 payload = 'assets=[]'
