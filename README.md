@@ -3,6 +3,15 @@ A Python package for the cryptocurrency exchange Hotbit that doesn't require an 
 
 This package is still at the development stage which is why not all endpoints are covered.
 
+# Installation
+```
+pip install hotbit
+```
+or 
+```
+pip install python-hotbit
+```
+
 # Discord
 Join click [here](https://discord.gg/FAK6yVQFE3) to join our Discord.
 
