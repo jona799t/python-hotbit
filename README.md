@@ -75,7 +75,7 @@ market = "ADA/USDT"
 side = "BUY"
 amount = 1000 # USDT (Last part of market)
 
-client.price(market=market, side=side, amount=amount)
+client.marketPrice(market=market, side=side, amount=amount)
 ```
 
 ### Depth Query
