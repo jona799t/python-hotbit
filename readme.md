@@ -32,7 +32,7 @@ authenticatorCode = "MyAuthenticatorCode"
 
 captchaKey = "My 2Captcha Key or Anti-Captcha Key"
 
-auth = hotbit.auth.login(email=email, password=password, authenticatorCode=authenticatorCode, antiCaptcha=captchaKey)
+auth = hotbit.auth.login(email=email, password=password, authenticatorCode=authenticatorCode, antiCaptcha=captchaKey) #If you use 2Captcha write twoCaptcha instead of antiCaptcha
 Client = hotbit.Hotbit(auth)
 ```
 ### Official API (Key/Secret)
