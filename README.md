@@ -5,6 +5,9 @@ The package also work with official api keys, if you want help getting one, join
 
 This is still at the development stage which is why not all endpoints are covered.
 
+# Updates
+If you want to see more updates, please star the project.
+
 # Installation
 ```
 pip install hotbit
