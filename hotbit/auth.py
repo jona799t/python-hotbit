@@ -21,7 +21,6 @@ def login(email="", password="", phone="", authenticatorCode="", antiCaptcha=Non
 
     headers = {
         "accept": "application/json, text/plain, */*",
-        "accept-encoding": "gzip, deflate, br",
         "accept-language": "da-DK,da;q=0.9,en-US;q=0.8,en;q=0.7",
         "cache-control": "no-cache",
         "pragma": "no-cache",
@@ -50,7 +49,6 @@ def login(email="", password="", phone="", authenticatorCode="", antiCaptcha=Non
 
     headers = {
         'accept': 'application/json, text/plain, */*',
-        'accept-encoding': 'gzip, deflate, br',
         'accept-language': 'en-DK,en;q=0.9,da-DK;q=0.8,da;q=0.7,en-US;q=0.6',
         'referer': 'https://www.hotbit.pro/login',
         'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
@@ -123,7 +121,6 @@ def login(email="", password="", phone="", authenticatorCode="", antiCaptcha=Non
     logger("Logging in ...")
     headers = {
         'accept': 'application/json, text/plain, */*',
-        'accept-encoding': 'gzip, deflate, br',
         'accept-language': 'en-DK,en;q=0.9,da-DK;q=0.8,da;q=0.7,en-US;q=0.6',
         'client': '1',
         'content-length': str(len(payload)),
