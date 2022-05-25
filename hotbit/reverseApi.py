@@ -1,11 +1,37 @@
 import requests
 import requestsWS
 from decimal import *
+from datetime import datetime
+import time
+
+DT_FORMAT = "%d/%m/%Y %H:%M:%S"
 
 def round_down(value, decimals): # https://stackoverflow.com/questions/41383787/round-down-to-2-decimal-in-python
     with localcontext() as ctx:
         ctx.rounding = ROUND_DOWN
         return round(value, decimals)
+
+def check_date_format(date_str):
+    try:
+        datetime.strptime(date_str, DT_FORMAT)
+    except ValueError:
+        print("This is the incorrect date string format. It should be DD-MM-YYYY")
+        return False
+    else:
+        return True
+    
+def date_str_to_timestamp(date_str=None):
+    if isinstance(date_str, str):
+        print("date : ", date_str)
+        is_valid = check_date_format(date_str)
+        timestamp = time.mktime(
+                datetime.strptime(date_str, DT_FORMAT).timetuple()
+            )
+
+        return {
+            "is_valid": is_valid,
+            "timestamp": timestamp
+        }
 
 class Hotbit:
     def __init__(self, auth):
@@ -180,6 +206,33 @@ class Hotbit:
             "use_discount": use_discount
         }
         resp = self.session.post("https://www.hotbit.pro/v1/order/create?platform=web", headers=self.defaultHeaders, data=payload)
+        return resp.json()
+    
+    def klineQuery(self, market, start, end, interval=60):
+        market = market.replace("/", "")
+        time_start_dict = date_str_to_timestamp(start)
+        time_end_dict = date_str_to_timestamp(end)
+
+        timestamp_start = int(time_start_dict.get("timestamp"))
+        timestamp_end = int(time_end_dict.get("timestamp"))
+
+        payload = {
+            "method": "kline.query",
+            "params": [
+                market,
+                timestamp_start,
+                timestamp_end,
+                interval
+            ],
+            "id": 100
+        }
+
+        resp = self.sessionWS.post(
+            'wss://ws.hotbit.io/',
+            json=payload,
+            encryption="gzip",
+            identifiers={"id": 100}
+        )
         return resp.json()
 
 
