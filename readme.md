@@ -14,8 +14,15 @@ or
 pip install python-hotbit
 ```
 
-# Discord
-Join click [here](https://discord.gg/FAK6yVQFE3) to join our Discord.
+# Help/Discord
+Join click [here](https://discord.gg/FAK6yVQFE3) to join our Discord, we're always happy to help.
+
+# Common errors
+If you are experiencing errors please try to type this in the terminal:
+```angular2html
+$ pip install --upgrade requestsWS
+$ pip install git+https://github.com/websocket-client/websocket-client.git
+```
 
 # Documentation
 ## Auth
