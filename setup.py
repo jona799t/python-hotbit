@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from pathlib import Path
 
-VERSION = '0.0.6'
+VERSION = '0.0.7'
 DESCRIPTION = "A Python package for the cryptocurrency exchange Hotbit that doesn't require an API Key, making it available to everyone"
 long_description = (Path(__file__).parent / "readme.md").read_text()
 
@@ -17,7 +17,7 @@ setup(
     license_files = ('LICENSE.txt',),
     long_description_content_type='text/markdown',
     packages=find_packages(),
-    install_requires=["pycryptodome", "anticaptchaofficial", "twocaptcha", "2captcha-python", "requests", "requestsWS==0.0.16"],
+    install_requires=["pycryptodome", "anticaptchaofficial", "twocaptcha", "2captcha-python", "requests", "requestsWS"],
     keywords=['hotbit', 'api', 'crypto', 'exchange'],
     classifiers=[
         "Development Status :: 1 - Planning",

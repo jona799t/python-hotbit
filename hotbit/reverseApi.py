@@ -1,5 +1,6 @@
 import requests
 import requestsWS
+import time
 from decimal import *
 
 def round_down(value, decimals): # https://stackoverflow.com/questions/41383787/round-down-to-2-decimal-in-python
@@ -9,6 +10,8 @@ def round_down(value, decimals): # https://stackoverflow.com/questions/41383787/
 
 class Hotbit:
     def __init__(self, auth):
+        self.auth = auth
+
         self.session = requests.Session()
         self.sessionWS = requestsWS.Session()
 
@@ -29,12 +32,12 @@ class Hotbit:
         time = resp.json()["Content"]["user_sign"]["time"]
         self.uid = resp.json()["Content"]["user_sign"]["uid"]
 
-        payload = {
+        self.openingPayload = {
             "id": 300,
             "method": "server.auth2",
             "params": [self.uid, time, whereFrom, sign]
         }
-        self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", identifiers={"id": 300})
+        self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=self.openingPayload, encryption="gzip", identifiers={"id": 300})
 
         payload = {
             "method": "server.ping",
@@ -47,13 +50,30 @@ class Hotbit:
         for market in self.marketList():
             self.marketPrecision[market["name"]] = market["money_prec"]
 
+
+    def wsGet(self, wsUrl, session, headers={}, encryption=None, identifiers=None, timeout=None, debug=False):
+        try:
+            return session.get(wsUrl, headers=headers, encryption=encryption, identifiers=identifiers, timeout=timeout, debug=debug)
+        except Exception:
+            session.wsData = {"CURRENT_URL": None}
+            session.post('wss://ws.hotbit.io/', json=self.openingPayload, encryption="gzip", identifiers={"id": 300})
+            return session.post(wsUrl, headers=headers, encryption=encryption, data=data, json=json, waitForResponse=waitForResponse, identifiers=identifiers, timeout=timeout, debug=debug)
+
+    def wsPost(self, wsUrl, session, headers={}, encryption=None, data=None, json=None, waitForResponse=True, identifiers=None, timeout=None, debug=False):
+        try:
+            return session.post(wsUrl, headers=headers, encryption=encryption, data=data, json=json, waitForResponse=waitForResponse, identifiers=identifiers, timeout=timeout, debug=debug)
+        except Exception:
+            session.wsData = {"CURRENT_URL": None}
+            session.post('wss://ws.hotbit.io/', json=self.openingPayload, encryption="gzip", identifiers={"id": 300})
+            return session.post(wsUrl, headers=headers, encryption=encryption, data=data, json=json, waitForResponse=waitForResponse, identifiers=identifiers, timeout=timeout, debug=debug)
+
     def serverTime(self):
         payload = {
             "method": "server.time",
             "params": [],
             "id": 10
         }
-        resp = self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", identifiers={"id": 10})
+        resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=payload, encryption="gzip", identifiers={"id": 10})
         return resp.json()
 
     def stateSubscribeall(self, receiver):
@@ -62,10 +82,10 @@ class Hotbit:
             "params": [],
             "id": 402
         }
-        self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", waitForResponse=False)
+        self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=payload, encryption="gzip", waitForResponse=False)
 
         while True:
-            resp = self.sessionWS.get('wss://ws.hotbit.io/', encryption="gzip", identifiers={"id": 0})
+            resp = self.wsGet('wss://ws.hotbit.io/', self.sessionWS, encryption="gzip", identifiers={"id": 0})
             receiver(resp.json())
 
     def balanceQuery(self):
@@ -74,7 +94,7 @@ class Hotbit:
             "method": "balance.query",
             "params": []
         }
-        resp = self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", identifiers={"id": 405})
+        resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=payload, encryption="gzip", identifiers={"id": 405})
         return resp.json()
 
     def depthQuery(self, market, interval="1e-8", limit=100):
@@ -88,7 +108,7 @@ class Hotbit:
             ],
             "id": 20
         }
-        resp = self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", identifiers={"id": 20})
+        resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=payload, encryption="gzip", identifiers={"id": 20})
         return resp.json()
 
     def orderQuery(self, offset=0, limit=50):
@@ -101,7 +121,7 @@ class Hotbit:
             ],
             "id": 13
         }
-        resp = self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", identifiers={"id": 13})
+        resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=payload, encryption="gzip", identifiers={"id": 13})
         return resp.json()
 
     def marketPrice(self, market, side, amount=0):
@@ -115,7 +135,7 @@ class Hotbit:
             ],
             "id": 20
         }
-        resp = self.sessionWS.post('wss://ws.hotbit.io/', json=payload, encryption="gzip", identifiers={"id": 20})
+        resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=payload, encryption="gzip", identifiers={"id": 20})
         if side.lower() == "buy":
             asks = resp.json()["result"]["asks"]
             _amount = 0
@@ -184,7 +204,7 @@ class Hotbit:
 
 
     def customWS(self, whatToSend):
-        resp = self.sessionWS.post('wss://ws.hotbit.io/', json=whatToSend, encryption="gzip").text
+        resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=whatToSend, encryption="gzip").text
         return resp
 
     def customHTTP(self, url, whatToSend):

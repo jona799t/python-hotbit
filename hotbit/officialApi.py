@@ -2,7 +2,6 @@ import hashlib
 import requests
 import requestsWS
 
-
 class Hotbit:
     def __init__(self, apiKey, apiSecret):
         self.baseUrl = "https://api.hotbit.io/v2"
@@ -11,6 +10,12 @@ class Hotbit:
         self.api_secret = apiSecret
 
         self.sessionWS = requestsWS.Session()
+
+    def wsGet(self, wsUrl, session, headers=None, encryption=None, identifiers=None, timeout=None, debug=False):
+        return session.get(wsUrl, headers=headers, encryption=encryption, identifiers=identifiers, timeout=timeout, debug=debug)
+
+    def wsPost(self, wsUrl, session, headers=None, encryption=None, data=None, json=None, waitForResponse=True, identifiers=None, timeout=None, debug=False):
+        return session.post(wsUrl, headers=headers, encryption=encryption, data=data, json=json, waitForResponse=waitForResponse, identifiers=identifiers, timeout=timeout, debug=debug)
 
     def http(self, urlpath, payload, type="GET"):
         if urlpath.split("/")[1] == "p2":
@@ -35,7 +40,7 @@ class Hotbit:
             "params":[market.replace("/", ""),limit,interval],
             "id":100
         }
-        return self.sessionWS.post("wss://ws.hotbit.io/v2/", json=payload, encryption="gzip", identifiers={"id": 100}).json()
+        return self.wsPost("wss://ws.hotbit.io/v2/", self.sessionWS, json=payload, encryption="gzip", identifiers={"id": 100}).json()
 
     def marketPrice(self, market, side, amount=0):
         resp = self.depthQuery(market)
