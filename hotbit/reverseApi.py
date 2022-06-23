@@ -201,6 +201,23 @@ class Hotbit:
         }
         resp = self.session.post("https://www.hotbit.pro/v1/order/create?platform=web", headers=self.defaultHeaders, data=payload)
         return resp.json()
+    
+    def priceQuery(self, market):
+        market = market.replace("/", "")
+
+        payload = {
+            "method":"price.query",
+            "params":[market],
+            "id":100
+        }
+
+        resp = self.sessionWS.post(
+            'wss://ws.hotbit.io/',
+            json=payload,
+            encryption="gzip",
+            identifiers={"id": 100}
+        )
+        return resp.json()
 
 
     def customWS(self, whatToSend):
