@@ -235,8 +235,8 @@ class Hotbit:
 
     def fetchOrderHistory(self, market, since):
         market = market.replace("/", "")
-        end_time = int(time.time())  # current time
-        start_time = end_time - since * 60  # current time - e.g 10min, It fetches all Orders in the last 10min
+        end_time = int(time.time())
+        start_time = end_time - since * 60
         payload = {}
         resp = self.session.get(
             f'https://www.hotbit.io/v1/order/history?start_time={start_time}&end_time={end_time}&page=1&page_size=20&platform=web',
