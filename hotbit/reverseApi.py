@@ -227,7 +227,7 @@ class Hotbit:
         resp = self.session.post(url, json=whatToSend).text
         return resp
 	
-def fetchOrderHistory(self, market, since):
+    def fetchOrderHistory(self, market, since):
 	market = market.replace("/", "")
 	end_time = int(time.time())   #current time
 	start_time = end_time - since*60   #current time - e.g 10min, It fetches all Orders in the last 10min
