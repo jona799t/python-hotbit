@@ -218,14 +218,6 @@ class Hotbit:
             identifiers={"id": 100}
         )
         return resp.json()
-	
-    def fetchOrderHistory(self, market, since):
-        market = market.replace("/", "")
-        end_time = int(time.time())   #current time
-        start_time = end_time - since*60   #current time - e.g 10min, It fetches all Orders in the last 10min
-        payload = {}
-        resp = self.session.get(f'https://www.hotbit.io/v1/order/history?start_time={start_time}&end_time={end_time}&page=1&page_size=20&platform=web', headers=self.defaultHeaders, data=payload)
-	return resp.json()
 
     def customWS(self, whatToSend):
         resp = self.wsPost('wss://ws.hotbit.io/', self.sessionWS, json=whatToSend, encryption="gzip").text
@@ -234,3 +226,11 @@ class Hotbit:
     def customHTTP(self, url, whatToSend):
         resp = self.session.post(url, json=whatToSend).text
         return resp
+	
+def fetchOrderHistory(self, market, since):
+	market = market.replace("/", "")
+	end_time = int(time.time())   #current time
+	start_time = end_time - since*60   #current time - e.g 10min, It fetches all Orders in the last 10min
+	payload = {}
+	resp = self.session.get(f'https://www.hotbit.io/v1/order/history?start_time={start_time}&end_time={end_time}&page=1&page_size=20&platform=web', headers=self.defaultHeaders, data=payload)
+		return resp.json()
