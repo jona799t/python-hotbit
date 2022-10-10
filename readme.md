@@ -115,6 +115,12 @@ Retreve a list over all tickers.
 client.allticker()
 ```
 
+### Allticker
+Get the order history.
+```python
+client.fetchOrderHistory(since)
+```
+
 ### HTTP
 This only works when using the official API. Endpoints can be found here: https://hotbitex.github.io/slate/docs/spot/v2/en.
 ```python

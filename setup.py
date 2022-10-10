@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from pathlib import Path
 
-VERSION = '0.0.9'
+VERSION = '0.0.10'
 DESCRIPTION = "A Python package for the cryptocurrency exchange Hotbit that doesn't require an API Key, making it available to everyone"
 long_description = (Path(__file__).parent / "readme.md").read_text()
 

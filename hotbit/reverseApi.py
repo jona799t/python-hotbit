@@ -219,8 +219,7 @@ class Hotbit:
         )
         return resp.json()
 
-    def fetchOrderHistory(self, market, since):
-        market = market.replace("/", "")
+    def fetchOrderHistory(self, since):
         end_time = int(time.time())   #current time
         start_time = end_time - since*60   #current time - e.g 10min, It fetches all Orders in the last 10min
         payload = {}
