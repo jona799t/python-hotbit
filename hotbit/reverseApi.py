@@ -1,6 +1,7 @@
 import requests
 import requestsWS
-import time
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
 from decimal import *
 
 def round_down(value, decimals): # https://stackoverflow.com/questions/41383787/round-down-to-2-decimal-in-python
@@ -10,20 +11,38 @@ def round_down(value, decimals): # https://stackoverflow.com/questions/41383787/
 
 class Hotbit:
     def __init__(self, auth):
-        self.auth = auth
+        # create session and WS session
+        ## create driver with selenium/undetected_chromedriver
+        print("Solving Cloudflare - allow up to 5s")
+        driver = uc.Chrome()
+        driver.implicitly_wait(15)
+        driver.get("https://www.hotbit.io/")
+        driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div[1]/div/div[1]/p[1]')  # waits till cf is solved and the Hotbit Title is visable
+
+        ## get cookies and user_agent
+        brCookies = driver.get_cookies()
+        ua = driver.execute_script("return navigator.userAgent")
+
+        ## filter out the cf_clearance cookie
+        cf_cookie = [cookie for cookie in brCookies if cookie['name'] == 'cf_clearance'][0]['value']
+        self.cookies = {"cf_clearance": cf_cookie}
+        self.defaultHeaders = {"user-agent": ua}
+        driver.close()
+        print('Successfully solved Cloudflare')
 
         self.session = requests.Session()
         self.sessionWS = requestsWS.Session()
 
+        # add cf and hotbit-account cookies
         for key, value in auth.items():
-            self.session.cookies.set(key, value, domain="hotbit.pro")
+            self.session.cookies.set(key, value, domain="hotbit.io")
 
-        self.defaultHeaders = {
-            "referer": "https://www.hotbit.pro/",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36",
-        }
-        resp = self.session.get("https://www.hotbit.pro/v1/info?platform=web", headers=self.defaultHeaders)
-        if resp.json()["Msg"] != "success" or resp.status_code != 200:
+        # set defaultHeader, cookies, check status of first get request and assign params for openingPayload
+        self.session.headers['User-Agent'] = ua
+        self.session.headers['referer'] = 'https://www.hotbit.io/dw'
+        resp = self.session.get('https://www.hotbit.io/v1/info?platform=web', headers=self.defaultHeaders, cookies=self.cookies)
+
+        if resp.json()['Msg'] != 'success' or resp.status_code != 200:
             print(resp.content)
             exit(resp.status_code)
 
@@ -180,7 +199,7 @@ class Hotbit:
             "market": market.upper(),
             "order_id": order_id
         }
-        resp = self.session.post("https://www.hotbit.pro/v1/order/cancel?platform=web", headers=self.defaultHeaders, data=payload)
+        resp = self.session.post("https://www.hotbit.io/v1/order/cancel?platform=web", headers=self.defaultHeaders, data=payload, cookies=self.cookies)
         return resp.json()
 
     def order(self, price, amount, market, side, type="LIMIT", hide=False, use_discount=False):
@@ -199,7 +218,7 @@ class Hotbit:
             "hide": hide,
             "use_discount": use_discount
         }
-        resp = self.session.post("https://www.hotbit.pro/v1/order/create?platform=web", headers=self.defaultHeaders, data=payload)
+        resp = self.session.post("https://www.hotbit.io/v1/order/create?platform=web", headers=self.defaultHeaders, cookies=self.cookies, data=payload)
         return resp.json()
     
     def priceQuery(self, market):
@@ -219,11 +238,13 @@ class Hotbit:
         )
         return resp.json()
 
-    def fetchOrderHistory(self, since):
-        end_time = int(time.time())   #current time
-        start_time = end_time - since*60   #current time - e.g 10min, It fetches all Orders in the last 10min
-        payload = {}
-        resp = self.session.get(f'https://www.hotbit.io/v1/order/history?start_time={start_time}&end_time={end_time}&page=1&page_size=20&platform=web', headers=self.defaultHeaders, data=payload)
+    def fetchTradeHistory(self, market, limit, last_id=0):
+        payload = {
+            "market": market,
+            "limit": limit,
+            "last_id": last_id
+        }
+        resp = self.session.post(f'https://api.hotbit.io/api/v1/market.deals?market={market}&limit={limit}&last_id={last_id}', data=payload, headers=self.defaultHeaders, cookies=self.cookies)
         return resp.json()
 
     def customWS(self, whatToSend):
