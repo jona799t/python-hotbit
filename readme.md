@@ -5,6 +5,12 @@ The package also work with official api keys, if you want help getting one, join
 
 This is still at the development stage which is why not all endpoints are covered.
 
+# It's time to take a bow
+As some of you might now, Hotbit has closed down. Do to this I will be archiving this project.  
+You can read more here: https://hotbit.zendesk.com/hc/en-us/articles/14750194236823
+
+Please notice I am not involved with Hotbit and has never worked for them. I cannot do anything about their decision.
+
 # Installation
 ```
 pip install hotbit
