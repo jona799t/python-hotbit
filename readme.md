@@ -9,7 +9,9 @@ This is still at the development stage which is why not all endpoints are covere
 As some of you might now, Hotbit has closed down. Do to this I will be archiving this project.  
 You can read more here: https://hotbit.zendesk.com/hc/en-us/articles/14750194236823
 
-Please notice I am not involved with Hotbit and has never worked for them. I cannot do anything about their decision.
+Please notice I am not involved with Hotbit and has never worked for them. I cannot do anything about their decision.  
+
+This repo will remain up, in case anyone finds it interesting.
 
 # Installation
 ```
